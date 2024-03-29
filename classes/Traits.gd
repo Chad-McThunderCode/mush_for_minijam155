@@ -20,7 +20,7 @@ func _ready():
 func sporePrint():
 	print(self)
 	var rounding = 10000
-	print("Spore Storage:", round(traits.sporeStorage*rounding)/rounding)
+	print("Spore Storage:", round(traits.sporeStorage*rounding)/rounding, calculateObfuscation(traits.sporeStorage, 9), calculateObfuscation(traits.sporeStorage, 2), calculateObfuscation(traits.sporeStorage, 1))
 	print("Spore Mass:", round(traits.sporeMass*rounding)/rounding)
 	print("Nutrient Need:", round(traits.nutrientNeed*rounding)/rounding)
 	print("Mutation Rate:", round(traits.mutationRate*rounding)/rounding)
@@ -35,19 +35,14 @@ func _process(delta):
 	pass
 
 func updateList():
-	for c in $VBoxContainer.get_children():
-		$VBoxContainer.remove_child(c)
+	for c in $Control/VBoxContainer.get_children():
+		$Control/VBoxContainer.remove_child(c)
 		c.queue_free()
 	var pos = 0
-	$VBoxContainer.size.y = 0
 	for t in traits:
 		var text = Label.new()
 		text.text = " " + t + ": " +  str(round(traits[t]*100)/100)
-		text.position.y = pos
-		pos += 32
-		$VBoxContainer.size.y+=32
-		$VBoxContainer.add_child(text)
-	#$VBoxContainer.add_child()
+		$Control/VBoxContainer.add_child(text)
 
 func createFromDefaults():
 	traits.sporeStorage = lerpf(20, 40, randf())
@@ -64,7 +59,6 @@ func createFromDefaults():
 func createFromTraits(other : Traits) -> void:
 	for t in other.traits:
 		traits[t] = other.traits[t]
-	print("Here it's createFromTraits", traits.mutationMultiplier)
 	updateList()
 
 func calculateStep(largerBetter : bool = true) -> float:
@@ -104,13 +98,18 @@ func mutate() -> void:
 		traits.sporeMass *= 0.9 + value
 		traits.sporeStorage *= 0.9 + value
 
+func calculateObfuscation(num, level):
+	var h = float(str(num).hash())
+	var deviation = num * level / 10
+	var min = num - deviation
+	var max = num + deviation
+	return {"min": min, "max": max}
+	
+
 func breed(other : Traits) -> Traits:
 	var t = Traits.new()
-	print("I AM: ", self, " AND I BREED WITH: ", other)
 	for i in t.traits:
-		print("Interpolating ", i, "between ", traits[str(i)], " and ", other.traits[str(i)], "gives:")
 		t.traits[i] = lerpf(traits[i], other.traits[i], randf())
-		print(t.traits[i])
 	return t
 
 func onInfoDrawRequest():

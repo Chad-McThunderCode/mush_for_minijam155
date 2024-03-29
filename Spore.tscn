@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1aq8rhlrapfr"]
+[gd_scene load_steps=9 format=3 uid="uid://d1aq8rhlrapfr"]
 
 [ext_resource type="Script" path="res://classes/Traits.gd" id="1_hj3jc"]
 [ext_resource type="Texture2D" uid="uid://b8cxj54lpw2iv" path="res://art/spore.png" id="2_gwymf"]
+[ext_resource type="Script" path="res://ControlResizeTooltip.gd" id="3_pxyoc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_07qth"]
 atlas = ExtResource("2_gwymf")
@@ -21,6 +22,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_chqlc"]
 radius = 34.9285
 
+[sub_resource type="SystemFont" id="SystemFont_ea5vb"]
+
+[sub_resource type="Theme" id="Theme_ak1ke"]
+default_font = SubResource("SystemFont_ea5vb")
+default_font_size = 12
+
 [node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
 
@@ -32,11 +39,22 @@ sprite_frames = SubResource("SpriteFrames_om1rm")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_chqlc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_right = 200.0
-offset_bottom = 500.0
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("3_pxyoc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme = SubResource("Theme_ak1ke")
 
 [connection signal="input_event" from="Area2D" to="." method="onInputEvent"]
 [connection signal="mouse_entered" from="Area2D" to="." method="onInfoDrawRequest"]
