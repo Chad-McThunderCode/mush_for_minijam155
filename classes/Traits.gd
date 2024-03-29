@@ -54,7 +54,7 @@ func createFromDefaults():
 	traits.sporeMass = lerpf(10, 15, randf())
 	traits.nutrientNeed = lerpf(10, 15, randf())
 	traits.mutationRate = lerpf(0.2, 0.25, randf())
-	traits.mutationMultiplier = 100#lerpf(0.5, 1.5, randf())
+	traits.mutationMultiplier = lerpf(0.5, 1.5, randf())
 	traits.critRate = lerpf(25, 35, randf()) 
 	traits.bodySize = lerpf(2, 3, randf())
 	traits.bodyCount = lerpf(3, 25/traits.bodySize, randf())
@@ -64,14 +64,13 @@ func createFromDefaults():
 func createFromTraits(other : Traits) -> void:
 	for t in other.traits:
 		traits[t] = other.traits[t]
-		print(t is int)
-	print("Here it's ", traits.mutationMultiplier)
+	print("Here it's createFromTraits", traits.mutationMultiplier)
 	updateList()
 
 func calculateStep(largerBetter : bool = true) -> float:
 	var value = 0
 	if(randf() < traits.mutationRate):
-		value = (randf() - 0.5) * 2 * traits.mutationMultiplier# -1 to 1
+		value = (randf() - 0.5) * 2# * traits.mutationMultiplier# -1 to 1
 		if(value > 0.0 and not largerBetter and randf() < traits.critRate):
 			value *= -1
 	return value
@@ -105,14 +104,8 @@ func mutate() -> void:
 
 func breed(other : Traits) -> Traits:
 	var t = Traits.new()
-	t.traits.sporeStorage = lerpf(traits.sporeStorage, other.traits.sporeStorage, randf())
-	t.traits.sporeMass = lerpf(traits.sporeMass, other.traits.sporeMass, randf())
-	t.traits.nutrientNeed = lerpf(traits.nutrientNeed, other.traits.nutrientNeed, randf())
-	t.traits.mutationRate = lerpf(traits.mutationRate, other.traits.mutationRate, randf())
-	t.traits.critRate = lerpf(traits.critRate, other.traits.critRate, randf())
-	t.traits.bodySize = lerpf(traits.bodySize, other.traits.bodySize, randf())
-	t.traits.bodyCount = lerpf(traits.bodyCount, other.traits.bodyCount, randf())
-	t.traits.competitiveness = lerpf(traits.competitiveness, other.traits.competitiveness, randf())
+	for i in t.traits:
+		t.traits[i] = lerpf(traits[i], other.traits[i], randf())
 	return t
 
 func onInfoDrawRequest():

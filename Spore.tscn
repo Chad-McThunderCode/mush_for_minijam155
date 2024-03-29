@@ -23,6 +23,17 @@ radius = 34.9285
 
 [node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
+traits = {
+"bodyCount": 0.0,
+"bodySize": 0.0,
+"competitiveness": 0.0,
+"critRate": 0.0,
+"mutationMultiplier": 0.0,
+"mutationRate": 0.0,
+"nutrientNeed": 0.0,
+"sporeMass": 0.0,
+"sporeStorage": 0.0
+}
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_om1rm")

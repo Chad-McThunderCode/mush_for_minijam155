@@ -5,8 +5,8 @@ var partners = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	generateSpores(2)
-	var t = get_children()[0].breed(get_children()[1])
-	t.sporePrint()
+	for i in get_children():
+		i.sporePrint()
 
 func generateSpores(density):
 	for i in range(0, density):
