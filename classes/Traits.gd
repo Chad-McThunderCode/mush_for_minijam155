@@ -20,7 +20,7 @@ func _ready():
 func sporePrint():
 	print(self)
 	var rounding = 10000
-	print("Spore Storage:", round(traits.sporeStorage*rounding)/rounding, calculateObfuscation(traits.sporeStorage, 9), calculateObfuscation(traits.sporeStorage, 2), calculateObfuscation(traits.sporeStorage, 1))
+	print("Spore Storage:", round(traits.sporeStorage*rounding)/rounding, calculateObfuscation(traits.sporeStorage, 3), calculateObfuscation(traits.sporeStorage, 2), calculateObfuscation(traits.sporeStorage, 1))
 	print("Spore Mass:", round(traits.sporeMass*rounding)/rounding)
 	print("Nutrient Need:", round(traits.nutrientNeed*rounding)/rounding)
 	print("Mutation Rate:", round(traits.mutationRate*rounding)/rounding)
@@ -45,7 +45,7 @@ func updateList():
 		$Control/VBoxContainer.add_child(text)
 
 func createFromDefaults():
-	traits.sporeStorage = lerpf(20, 40, randf())
+	traits.sporeStorage = lerpf(20, 20.1, randf())
 	traits.sporeMass = lerpf(10, 15, randf())
 	traits.nutrientNeed = lerpf(10, 15, randf())
 	traits.mutationRate = lerpf(0.5, 0.75, randf())
@@ -93,17 +93,37 @@ func mutate() -> void:
 		var value = randf() / 5
 		traits.bodyCount *= 0.9 + value
 		traits.nutrientNeed *= 0.9 + value # 0.9 : 1.1
-	if(randf() <traits.mutationRate):
+	if(randf() < traits.mutationRate):
 		var value = randf() / 5
 		traits.sporeMass *= 0.9 + value
 		traits.sporeStorage *= 0.9 + value
 
+func floatHashFloat(num):
+	var r = RegEx.new()
+	r.compile("[0-9]")
+	var hash
+	var numbers = []
+	var result = ""
+	var fail = 0
+	while(len(numbers) < 10 or fail > 100):
+		fail += 1
+		num += 1
+		hash = str(num).md5_text()
+		numbers = r.search_all(hash)
+	for i in numbers:
+		result += i.get_string()
+	return float(str("0.", result))
+
 func calculateObfuscation(num, level):
-	var h = float(str(num).hash())
-	var deviation = num * level / 10
-	var min = num - deviation
-	var max = num + deviation
-	return {"min": min, "max": max}
+	var height = num * 0.2
+	var factor = floatHashFloat(num)
+	print("out factor ", factor)
+	var center = num - (0.5 * height) + (height * factor)
+	for i in range(1, level):
+		factor = floatHashFloat(num+i)
+		print("factor ", factor)
+		center = center - (0.5 * height) + (height * factor)
+	return {"min": center - (0.5 * height * level), "max": center + (0.5 * height * level)}
 	
 
 func breed(other : Traits) -> Traits:

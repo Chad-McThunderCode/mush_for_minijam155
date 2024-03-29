@@ -12,7 +12,7 @@ func generateSpores(density):
 	for i in range(0, density):
 		var t = SPORE.instantiate()
 		t.createFromDefaults()
-		t.position = Vector2(randf()*300, randf()*300)
+		t.position = Vector2(round(randf()*300), round(randf()*300))
 		add_child(t)
 		#t.sporePrint()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
