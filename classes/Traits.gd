@@ -1,88 +1,129 @@
 class_name Traits
-extends Node
+extends Node2D
 
-@export var sporeStorage : float
-@export var sporeMass : float
-@export var nutrientNeed : float
-@export var mutationRate : float
-@export var mutationMultiplier : float
-@export var critRate : float # ignores formula, no downside to upside
-@export var bodySize : float
-@export var bodyCount : float
-@export var competitiveness : float
+@export var traits = {
+	"sporeStorage" : 0,
+	"sporeMass" : 0,
+	"nutrientNeed" : 0,
+	"mutationRate" : 0,
+	"mutationMultiplier" : 0,
+	"critRate" : 0, 
+	"bodySize" : 0,
+	"bodyCount" : 0,
+	"competitiveness" : 0
+	}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	updateList()
 
+func sporePrint():
+	print(self)
+	var rounding = 10000
+	print("Spore Storage:", round(traits.sporeStorage*rounding)/rounding)
+	print("Spore Mass:", round(traits.sporeMass*rounding)/rounding)
+	print("Nutrient Need:", round(traits.nutrientNeed*rounding)/rounding)
+	print("Mutation Rate:", round(traits.mutationRate*rounding)/rounding)
+	print("Mutation Multiplier:", round(traits.mutationMultiplier*rounding)/rounding)
+	print("Crit Rate:", round(traits.critRate*rounding)/rounding)
+	print("Body Size:", round(traits.bodySize*rounding)/rounding)
+	print("Body Count:", round(traits.bodyCount*rounding)/rounding)
+	print("Competitiveness", round(traits.competitiveness*rounding)/rounding)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-func createNew():
-	sporeStorage = lerp(20, 40, randf())
-	sporeMass = lerp(10, 15, randf())
-	nutrientNeed = lerp(10, 15, randf())
-	mutationRate = lerp(0.8, 1.2, randf())
-	mutationMultiplier = lerp(0.5, 1.5, randf())
-	critRate = lerp(5, 10, randf()) 
-	bodySize = lerp(2, 3, randf())
-	bodyCount = lerp(3, 25/bodySize, randf())
-	competitiveness = lerp(0.5, 1.5, randf())
+func updateList():
+	for c in $ItemList.get_children():
+		$ItemList.remove_child(c)
+		c.queue_free()
+	var pos = 0
+	$ItemList.size.y = 0
+	for t in traits:
+		var text = Label.new()
+		text.text = " " + t + ": " +  str(round(traits[t]*100)/100)
+		text.position.y = pos
+		pos += 32
+		$ItemList.size.y+=32
+		$ItemList.add_child(text)
+	#$ItemList.add_child()
 
-func createFromTraits(traits : Traits) -> void:
-	sporeStorage = traits.sporeStorage
-	sporeMass = traits.sporeMass
-	nutrientNeed = traits.nutrientNeed
-	mutationRate = traits.mutationRate
-	critRate = traits.critRate
-	bodySize = traits.bodySize
-	bodyCount = traits.bodyCount
-	competitiveness = traits.competitiveness
+func createFromDefaults():
+	traits.sporeStorage = lerpf(20, 40, randf())
+	traits.sporeMass = lerpf(10, 15, randf())
+	traits.nutrientNeed = lerpf(10, 15, randf())
+	traits.mutationRate = lerpf(0.2, 0.25, randf())
+	traits.mutationMultiplier = 100#lerpf(0.5, 1.5, randf())
+	traits.critRate = lerpf(25, 35, randf()) 
+	traits.bodySize = lerpf(2, 3, randf())
+	traits.bodyCount = lerpf(3, 25/traits.bodySize, randf())
+	traits.competitiveness = lerpf(0.5, 1.5, randf())
+	updateList()
+
+func createFromTraits(other : Traits) -> void:
+	for t in other.traits:
+		traits[t] = other.traits[t]
+		print(t is int)
+	print("Here it's ", traits.mutationMultiplier)
+	updateList()
 
 func calculateStep(largerBetter : bool = true) -> float:
 	var value = 0
-	if(randf() < mutationRate):
-		value = (randf() - 0.5) * 2 * mutationMultiplier# -1 to 1
-		if(value > 0.0 and not largerBetter and randf() < critRate):
+	if(randf() < traits.mutationRate):
+		value = (randf() - 0.5) * 2 * traits.mutationMultiplier# -1 to 1
+		if(value > 0.0 and not largerBetter and randf() < traits.critRate):
 			value *= -1
 	return value
 
 func mutate() -> void:
 	# extra modifiers:
-	sporeStorage += calculateStep(true)
-	sporeMass += calculateStep(false)
-	nutrientNeed += calculateStep(false)
-	mutationRate += calculateStep(false)
-	critRate += calculateStep(true)
-	bodySize += calculateStep(true)
-	bodyCount += calculateStep(true)
-	competitiveness += calculateStep(true)
+	traits.sporeStorage += calculateStep(true)
+	traits.sporeMass += calculateStep(false)
+	traits.nutrientNeed += calculateStep(false)
+	traits.mutationRate += calculateStep(false)
+	traits.critRate += calculateStep(true)
+	traits.bodySize += calculateStep(true)
+	traits.bodyCount += calculateStep(true)
+	traits.competitiveness += calculateStep(true)
 	
 	# Phenotype:
 	# body size
-	if(randf() < mutationRate):
+	if(randf() < traits.mutationRate):
 		var value = randf() / 5
-		bodySize *= 0.9 + value
-		nutrientNeed *= 0.9 + value # 0.9 : 1.1
+		traits.bodySize *= 0.9 + value
+		traits.nutrientNeed *= 0.9 + value # 0.9 : 1.1
 	# body count
-	if(randf() < mutationRate):
+	if(randf() < traits.mutationRate):
 		var value = randf() / 5
-		bodyCount *= 0.9 + value
-		nutrientNeed *= 0.9 + value # 0.9 : 1.1
-	if(randf() < mutationRate):
+		traits.bodyCount *= 0.9 + value
+		traits.nutrientNeed *= 0.9 + value # 0.9 : 1.1
+	if(randf() <traits.mutationRate):
 		var value = randf() / 5
-		sporeMass *= 0.9 + value
-		sporeStorage *= 0.9 + value
+		traits.sporeMass *= 0.9 + value
+		traits.sporeStorage *= 0.9 + value
 
-func breed(traits : Traits) -> Traits:
+func breed(other : Traits) -> Traits:
 	var t = Traits.new()
-	t.sporeStorage = lerp(sporeStorage, traits.sporeStorage, randf())
-	t.sporeMass = lerp(sporeMass, traits.sporeMass, randf())
-	t.nutrientNeed = lerp(nutrientNeed, traits.nutrientNeed, randf())
-	t.mutationRate = lerp(mutationRate, traits.mutationRate, randf())
-	t.critRate = lerp(critRate, traits.critRate, randf())
-	t.bodySize = lerp(bodySize, traits.bodySize, randf())
-	t.bodyCount = lerp(bodyCount, traits.bodyCount, randf())
-	t.competitiveness = lerp(competitiveness, traits.competitiveness, randf())
+	t.traits.sporeStorage = lerpf(traits.sporeStorage, other.traits.sporeStorage, randf())
+	t.traits.sporeMass = lerpf(traits.sporeMass, other.traits.sporeMass, randf())
+	t.traits.nutrientNeed = lerpf(traits.nutrientNeed, other.traits.nutrientNeed, randf())
+	t.traits.mutationRate = lerpf(traits.mutationRate, other.traits.mutationRate, randf())
+	t.traits.critRate = lerpf(traits.critRate, other.traits.critRate, randf())
+	t.traits.bodySize = lerpf(traits.bodySize, other.traits.bodySize, randf())
+	t.traits.bodyCount = lerpf(traits.bodyCount, other.traits.bodyCount, randf())
+	t.traits.competitiveness = lerpf(traits.competitiveness, other.traits.competitiveness, randf())
 	return t
+
+func onInfoDrawRequest():
+	$ItemList.visible = true
+	$ItemList.global_position = get_global_mouse_position() +  Vector2(20, 0)
+
+
+func onMouseLeft():
+	$ItemList.visible = false
+
+
+func onInputEvent(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.pressed:
+		get_parent().addPartner(self)

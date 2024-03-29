@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1aq8rhlrapfr"]
+[gd_scene load_steps=6 format=3 uid="uid://d1aq8rhlrapfr"]
 
 [ext_resource type="Script" path="res://classes/Traits.gd" id="1_hj3jc"]
 [ext_resource type="Texture2D" uid="uid://b8cxj54lpw2iv" path="res://art/spore.png" id="2_gwymf"]
@@ -18,10 +18,27 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_chqlc"]
+radius = 34.9285
 
-[node name="Traits" type="Node" parent="."]
+[node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_om1rm")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_chqlc")
+
+[node name="ItemList" type="ItemList" parent="."]
+visible = false
+offset_right = 200.0
+offset_bottom = 500.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="input_event" from="Area2D" to="." method="onInputEvent"]
+[connection signal="mouse_entered" from="Area2D" to="." method="onInfoDrawRequest"]
+[connection signal="mouse_exited" from="Area2D" to="." method="onMouseLeft"]
