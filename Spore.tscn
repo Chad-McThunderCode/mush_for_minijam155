@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1aq8rhlrapfr"]
+
+[ext_resource type="Script" path="res://classes/Traits.gd" id="1_hj3jc"]
+[ext_resource type="Texture2D" uid="uid://b8cxj54lpw2iv" path="res://art/spore.png" id="2_gwymf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_07qth"]
+atlas = ExtResource("2_gwymf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_om1rm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_07qth")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Traits" type="Node" parent="."]
+script = ExtResource("1_hj3jc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_om1rm")

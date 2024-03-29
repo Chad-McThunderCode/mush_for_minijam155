@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm3oj6y6gygey"]
+
+[ext_resource type="Script" path="res://classes/Traits.gd" id="1_q5xml"]
+
+[node name="Traits" type="Node"]
+script = ExtResource("1_q5xml")
