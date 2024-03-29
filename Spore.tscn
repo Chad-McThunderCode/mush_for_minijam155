@@ -23,17 +23,6 @@ radius = 34.9285
 
 [node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
-traits = {
-"bodyCount": 0.0,
-"bodySize": 0.0,
-"competitiveness": 0.0,
-"critRate": 0.0,
-"mutationMultiplier": 0.0,
-"mutationRate": 0.0,
-"nutrientNeed": 0.0,
-"sporeMass": 0.0,
-"sporeStorage": 0.0
-}
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_om1rm")
@@ -43,8 +32,7 @@ sprite_frames = SubResource("SpriteFrames_om1rm")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_chqlc")
 
-[node name="ItemList" type="ItemList" parent="."]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 offset_right = 200.0
 offset_bottom = 500.0
 size_flags_horizontal = 3

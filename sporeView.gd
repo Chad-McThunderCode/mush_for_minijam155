@@ -22,17 +22,17 @@ func _process(delta):
 func addPartner(partner : Traits) -> void:
 	partners.push_back(partner)
 	if(len(partners) == 2):
+		print(partners[0], partners[1])
 		var s = SPORE.instantiate()
 		s.position = Vector2(randf() * 300, randf() * 300)
 		s.createFromTraits(partners[0].breed(partners[1]))
-		print("before mutate")
-		s.sporePrint()
-		print("after mutate:")
 		s.mutate()
-		s.sporePrint()
 		for i in get_children():
 			remove_child(i)
 		add_child(s)
+		s.position = Vector2(100, 100)
+		partners[0].position = Vector2(400, 100)
+		partners[1].position = Vector2(700, 100)
 		for i in partners:
 			add_child(i)
 		partners = []
