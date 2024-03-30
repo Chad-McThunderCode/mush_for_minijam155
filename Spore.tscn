@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://d1aq8rhlrapfr"]
+[gd_scene load_steps=8 format=3 uid="uid://d1aq8rhlrapfr"]
 
 [ext_resource type="Script" path="res://classes/Traits.gd" id="1_hj3jc"]
 [ext_resource type="Texture2D" uid="uid://b8cxj54lpw2iv" path="res://art/spore.png" id="2_gwymf"]
 [ext_resource type="Script" path="res://ControlResizeTooltip.gd" id="3_pxyoc"]
+[ext_resource type="Theme" uid="uid://vjk3yhqcnqgu" path="res://test_theme.tres" id="4_t4neh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_07qth"]
 atlas = ExtResource("2_gwymf")
@@ -21,12 +22,6 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_chqlc"]
 radius = 34.9285
-
-[sub_resource type="SystemFont" id="SystemFont_ea5vb"]
-
-[sub_resource type="Theme" id="Theme_ak1ke"]
-default_font = SubResource("SystemFont_ea5vb")
-default_font_size = 12
 
 [node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
@@ -54,7 +49,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
-theme = SubResource("Theme_ak1ke")
+theme = ExtResource("4_t4neh")
 
 [connection signal="input_event" from="Area2D" to="." method="onInputEvent"]
 [connection signal="mouse_entered" from="Area2D" to="." method="onInfoDrawRequest"]

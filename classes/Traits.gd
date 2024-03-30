@@ -1,6 +1,9 @@
 class_name Traits
 extends Node2D
 
+const BAR = preload("res://BarGraph.tscn")
+var currentObfuscation = 3
+
 var traits = {
 	"sporeStorage" : 0,
 	"sporeMass" : 0,
@@ -32,7 +35,11 @@ func sporePrint():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	var mouseDistance = round(global_position.distance_to(get_global_mouse_position()) / 100)
+	if(mouseDistance < currentObfuscation):
+		currentObfuscation -= 1
+		updateList()
+		
 
 func updateList():
 	for c in $Control/VBoxContainer.get_children():
@@ -40,9 +47,14 @@ func updateList():
 		c.queue_free()
 	var pos = 0
 	for t in traits:
-		var text = Label.new()
-		text.text = " " + t + ": " +  str(round(traits[t]*100)/100)
-		$Control/VBoxContainer.add_child(text)
+		#var text = Label.new()
+		#text.text = " " + t + ": " +  str(round(traits[t]*100)/100)
+		#$Control/VBoxContainer.add_child(text)
+		var bar = BAR.instantiate()
+		var minmax = calculateObfuscation(traits[t], currentObfuscation)
+		var limits = calculateObfuscation(traits[t], 4)
+		bar.buildFromValues(limits.max, round(minmax.min*100)/100, round(100*minmax.max)/100, 100, round(100*traits[t])/100)
+		$Control/VBoxContainer.add_child(bar)
 
 func createFromDefaults():
 	traits.sporeStorage = lerpf(20, 20.1, randf())
@@ -115,13 +127,13 @@ func floatHashFloat(num):
 	return float(str("0.", result))
 
 func calculateObfuscation(num, level):
-	var height = num * 0.2
+	if(level == 0):
+		return {"min": num, "max": num}
+	var height = num * 0.3
 	var factor = floatHashFloat(num)
-	print("out factor ", factor)
 	var center = num - (0.5 * height) + (height * factor)
 	for i in range(1, level):
 		factor = floatHashFloat(num+i)
-		print("factor ", factor)
 		center = center - (0.5 * height) + (height * factor)
 	return {"min": center - (0.5 * height * level), "max": center + (0.5 * height * level)}
 	

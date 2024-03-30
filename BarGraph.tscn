@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbk1hq8ii26r2"]
+
+[ext_resource type="Theme" uid="uid://vjk3yhqcnqgu" path="res://test_theme.tres" id="1_dppc0"]
+[ext_resource type="Script" path="res://BarGraph.gd" id="1_ealnm"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_dppc0")
+script = ExtResource("1_ealnm")
