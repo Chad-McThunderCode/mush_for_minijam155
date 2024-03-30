@@ -13,9 +13,12 @@ func _process(delta):
 
 #100 (value range), some min, some max, element width in pixel, some value in-between
 func buildFromValues(total, min, max, width, actual):
+	var c = Color.WHITE
+	c.a = 0.7
+	modulate = c
 	print("total", total, "min", min, "max", max, "width", width)
 	var white=StyleBoxFlat.new()
-	white.bg_color = Color.SALMON
+	white.bg_color = Color.CADET_BLUE
 	
 	var valueWidth = width/total
 	

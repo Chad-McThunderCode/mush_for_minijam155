@@ -1,9 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://d1aq8rhlrapfr"]
+[gd_scene load_steps=12 format=3 uid="uid://d1aq8rhlrapfr"]
 
 [ext_resource type="Script" path="res://classes/Traits.gd" id="1_hj3jc"]
 [ext_resource type="Texture2D" uid="uid://b8cxj54lpw2iv" path="res://art/spore.png" id="2_gwymf"]
+[ext_resource type="Shader" path="res://SporeGlow.gdshader" id="2_i6w56"]
 [ext_resource type="Script" path="res://ControlResizeTooltip.gd" id="3_pxyoc"]
 [ext_resource type="Theme" uid="uid://vjk3yhqcnqgu" path="res://test_theme.tres" id="4_t4neh"]
+[ext_resource type="Shader" path="res://Tooltip.gdshader" id="5_voybk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wi1om"]
+shader = ExtResource("2_i6w56")
+shader_parameter/center = Vector2(64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_07qth"]
 atlas = ExtResource("2_gwymf")
@@ -23,15 +29,20 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_chqlc"]
 radius = 34.9285
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1die6"]
+shader = ExtResource("5_voybk")
+
 [node name="Traits" type="Node2D"]
 script = ExtResource("1_hj3jc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_wi1om")
 sprite_frames = SubResource("SpriteFrames_om1rm")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
 shape = SubResource("CircleShape2D_chqlc")
 
 [node name="Control" type="Control" parent="."]
@@ -44,7 +55,7 @@ size_flags_vertical = 3
 script = ExtResource("3_pxyoc")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-layout_mode = 0
+material = SubResource("ShaderMaterial_1die6")
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 0

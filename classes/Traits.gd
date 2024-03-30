@@ -66,6 +66,7 @@ func createFromDefaults():
 	traits.bodySize = lerpf(2, 3, randf())
 	traits.bodyCount = lerpf(3, 5/traits.bodySize, randf())
 	traits.competitiveness = lerpf(0.5, 0.75, randf())
+	$AnimatedSprite2D.get_material().set_shader_parameter("center", Vector2(32., 32.))
 	updateList()
 
 func createFromTraits(other : Traits) -> void:
@@ -129,7 +130,7 @@ func floatHashFloat(num):
 func calculateObfuscation(num, level):
 	if(level == 0):
 		return {"min": num, "max": num}
-	var height = num * 0.3
+	var height = num * 0.5
 	var factor = floatHashFloat(num)
 	var center = num - (0.5 * height) + (height * factor)
 	for i in range(1, level):
